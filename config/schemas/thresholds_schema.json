@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "thresholds_schema.json",
+  "title": "Thresholds / Limits Schema",
+  "description": "Defines the structure for radar test pass/fail thresholds. Versioned for backward compatibility.",
+  "type": "object",
+  "required": ["schema_version", "radar_firmware_version", "thresholds"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version for backward compatibility tracking (semver)."
+    },
+    "radar_firmware_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Target radar firmware version these thresholds apply to."
+    },
+    "thresholds": {
+      "type": "object",
+      "description": "Collection of threshold definitions.",
+      "additionalProperties": {
+        "$ref": "#/definitions/threshold_entry"
+      }
+    }
+  },
+  "definitions": {
+    "threshold_entry": {
+      "type": "object",
+      "description": "A single threshold/limit definition.",
+      "properties": {
+        "min": {
+          "type": ["number", "null"],
+          "description": "Minimum acceptable value (null means no lower bound)."
+        },
+        "max": {
+          "type": ["number", "null"],
+          "description": "Maximum acceptable value (null means no upper bound)."
+        },
+        "min_db": {
+          "type": ["number", "null"],
+          "description": "Minimum acceptable value in dB."
+        },
+        "max_db": {
+          "type": ["number", "null"],
+          "description": "Maximum acceptable value in dB."
+        },
+        "min_meters": {
+          "type": ["number", "null"],
+          "description": "Minimum value in meters."
+        },
+        "max_meters": {
+          "type": ["number", "null"],
+          "description": "Maximum value in meters."
+        },
+        "max_ms": {
+          "type": ["number", "null"],
+          "description": "Maximum value in milliseconds."
+        },
+        "max_watts": {
+          "type": ["number", "null"],
+          "description": "Maximum power in watts."
+        },
+        "min_mbps": {
+          "type": ["number", "null"],
+          "description": "Minimum throughput in Mbps."
+        },
+        "max_offset_us": {
+          "type": ["number", "null"],
+          "description": "Maximum offset in microseconds."
+        },
+        "max_celsius": {
+          "type": ["number", "null"],
+          "description": "Maximum temperature in Celsius."
+        },
+        "warning_celsius": {
+          "type": ["number", "null"],
+          "description": "Warning temperature threshold in Celsius."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of this threshold."
+        }
+      }
+    }
+  }
+}
+

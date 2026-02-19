@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "hardware_config_schema.json",
+  "title": "Hardware Configuration Schema",
+  "description": "Defines the structure for a test bench hardware configuration file.",
+  "type": "object",
+  "required": ["schema_version", "test_bench", "uut", "psu", "ptp", "host"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version for backward compatibility (semver)."
+    },
+    "test_bench": {
+      "type": "object",
+      "required": ["id", "name", "hardware_type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the test bench."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the test bench."
+        },
+        "hardware_type": {
+          "type": "string",
+          "description": "Hardware type identifier (used for resource allocation)."
+        }
+      }
+    },
+    "uut": {
+      "type": "object",
+      "required": ["model", "interface", "ip_address", "port"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Radar UUT model identifier."
+        },
+        "interface": {
+          "type": "string",
+          "enum": ["ethernet", "usb", "serial"],
+          "description": "Communication interface type."
+        },
+        "ip_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "UUT IP address."
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Communication port number."
+        }
+      }
+    },
+    "psu": {
+      "type": "object",
+      "required": ["model", "interface"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Power Supply Unit model."
+        },
+        "interface": {
+          "type": "string",
+          "enum": ["serial", "usb", "ethernet", "gpib"],
+          "description": "PSU communication interface."
+        },
+        "port": {
+          "type": "string",
+          "description": "Serial/COM port for the PSU."
+        },
+        "ip_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "PSU IP address (if Ethernet)."
+        },
+        "voltage_range": {
+          "type": "object",
+          "properties": {
+            "min": { "type": "number", "minimum": 0 },
+            "max": { "type": "number", "minimum": 0 }
+          },
+          "required": ["min", "max"]
+        },
+        "current_limit": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum current limit in Amps."
+        }
+      }
+    },
+    "ptp": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether PTP synchronization is enabled."
+        },
+        "master_ip": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "PTP master clock IP address."
+        },
+        "domain": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127,
+          "description": "PTP domain number."
+        },
+        "sync_timeout_sec": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Timeout in seconds to wait for PTP sync."
+        }
+      }
+    },
+    "host": {
+      "type": "object",
+      "required": ["ip_address"],
+      "properties": {
+        "ip_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Host PC IP address."
+        },
+        "driver_library": {
+          "type": "string",
+          "description": "Path or name of the radar driver library."
+        }
+      }
+    }
+  }
+}
+

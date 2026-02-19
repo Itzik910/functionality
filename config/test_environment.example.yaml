@@ -1,6 +1,8 @@
 # Test Environment Configuration Example
 # Defines environment-level settings for test execution.
 
+schema_version: "1.0.0"
+
 environment:
   name: "development"
   log_level: "DEBUG"

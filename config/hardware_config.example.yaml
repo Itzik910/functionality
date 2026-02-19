@@ -1,6 +1,8 @@
 # Hardware Configuration Example
 # This file defines the hardware setup for a test bench.
 
+schema_version: "1.0.0"
+
 test_bench:
   id: "bench_001"
   name: "Test Bench Alpha"

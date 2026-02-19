@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "test_environment_schema.json",
+  "title": "Test Environment Configuration Schema",
+  "description": "Defines environment-level settings: Jira, GitLab, reporting, and resource manager.",
+  "type": "object",
+  "required": ["schema_version", "environment"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version (semver)."
+    },
+    "environment": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["development", "staging", "production"],
+          "description": "Environment name."
+        },
+        "log_level": {
+          "type": "string",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+          "default": "INFO"
+        }
+      }
+    },
+    "jira": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Jira instance base URL."
+        },
+        "xray_api_version": {
+          "type": "string",
+          "description": "Xray REST API version."
+        },
+        "project_key": {
+          "type": "string",
+          "description": "Jira project key."
+        },
+        "auth_method": {
+          "type": "string",
+          "enum": ["token", "basic", "oauth"],
+          "description": "Authentication method."
+        }
+      }
+    },
+    "gitlab": {
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "description": "GitLab project ID."
+        },
+        "pipeline_trigger_token": {
+          "type": "string",
+          "description": "Token for triggering pipelines."
+        }
+      }
+    },
+    "reporting": {
+      "type": "object",
+      "properties": {
+        "allure_results_dir": {
+          "type": "string",
+          "default": "allure-results"
+        },
+        "html_report_dir": {
+          "type": "string",
+          "default": "reports"
+        },
+        "attach_logs": {
+          "type": "boolean",
+          "default": true
+        },
+        "attach_psu_data": {
+          "type": "boolean",
+          "default": true
+        },
+        "attach_ptp_data": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "resource_manager": {
+      "type": "object",
+      "properties": {
+        "max_concurrent_jobs": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 4
+        },
+        "queue_timeout_sec": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 3600
+        },
+        "retry_on_failure": {
+          "type": "boolean",
+          "default": true
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 2
+        }
+      }
+    }
+  }
+}
+
