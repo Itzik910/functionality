@@ -13,6 +13,7 @@ license = {text = "Proprietary"}
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
+collect_ignore_glob = ["src/*"]
 python_functions = ["test_*"]
 markers = [
     "functional: Functional verification tests",
