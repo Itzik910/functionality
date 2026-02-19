@@ -96,6 +96,45 @@ This project implements a comprehensive **Automated Test Environment** for compl
 - **Job Parameters:** Build version, hardware type, configuration file, threshold file.
 - **Triggering:** Automatic (post-build) and manual (authorized users).
 
+### ResourceManager — Detailed Design Specification
+
+> **Goal:** Implement a robust `ResourceManager` class that goes beyond simple CI queuing.
+> It must bridge the gap between software execution (GitLab CI) and physical hardware state (Radar Test Benches).
+
+#### Core Requirements
+
+**1. Hardware-Aware Allocation**
+- Mechanism to map `hardware_type` to specific, physical test benches.
+- Each bench has a unique ID, connection details (IP, PSU ports), and a **State** (`Available`, `Busy`, `Maintenance`, `Offline`).
+
+**2. Pre-Flight Health Checks**
+- Before granting a "Lock" on a resource, the RM must perform a basic health check (e.g., ping the UUT, verify PSU communication).
+- If a bench fails the health check, it is marked as `Offline` and the RM attempts to allocate the next available bench of the same type.
+
+**3. Concurrency & Locking**
+- No two Jobs can occupy the same physical bench simultaneously.
+- Supports a `max_concurrent_jobs` setting as defined in `test_environment_schema.json`.
+
+**4. Integration Points**
+- **CLI Integration:** `scripts/run_tests.py` calls the ResourceManager for bench allocation before starting the Pytest process.
+- **Reporting:** The RM returns a "Resource Metadata" object (Bench ID, IP, PSU logs) to be attached to test reports.
+
+#### Technical Constraints
+
+| Constraint | Detail |
+|---|---|
+| **Location** | `src/resource_manager/manager.py` |
+| **Data-Driven** | Uses `ConfigLoader` to load bench definitions from `config/test_benches.yaml` |
+| **Logging** | `loguru` for detailed tracing of allocation and health check failures |
+| **Clean Code** | Layered architecture; RM is decoupled from specific radar driver logic |
+
+#### Deliverables
+
+- `ResourceManager` class with `request_resource(hw_type)` and `release_resource(bench_id)` methods.
+- A mock "Health Check" utility for the initial PoC.
+- Integration snippet for `scripts/run_tests.py`.
+- Updated `PROJECT_HISTORY.md` with implementation details.
+
 ---
 
 ## Output & Reporting
