@@ -1,0 +1,14 @@
+# PROJECT HISTORY — Source of Truth
+
+> This file tracks every change, addition, and refactor performed on this project.
+> Format: `[Timestamp] | [Model Name] | [Action Description]`
+
+---
+
+## Change Log
+
+[2026-02-19 | Claude claude-4.6-opus | Initialized Git repository for the Radar Automated Test Environment project]
+[2026-02-19 | Claude claude-4.6-opus | Created PROJECT_HISTORY.md as the project's source of truth for tracking all changes]
+[2026-02-19 | Claude claude-4.6-opus | Created README.md summarizing the project vision based on the design document]
+[2026-02-19 | Claude claude-4.6-opus | Initial commit: Project structure and documentation]
+
