@@ -1,0 +1,30 @@
+# Test Environment Configuration Example
+# Defines environment-level settings for test execution.
+
+environment:
+  name: "development"
+  log_level: "DEBUG"
+
+jira:
+  base_url: "https://your-jira-instance.atlassian.net"
+  xray_api_version: "v2"
+  project_key: "RADAR"
+  auth_method: "token"  # "token" or "basic"
+
+gitlab:
+  project_id: "12345"
+  pipeline_trigger_token: ""
+
+reporting:
+  allure_results_dir: "allure-results"
+  html_report_dir: "reports"
+  attach_logs: true
+  attach_psu_data: true
+  attach_ptp_data: true
+
+resource_manager:
+  max_concurrent_jobs: 4
+  queue_timeout_sec: 3600
+  retry_on_failure: true
+  max_retries: 2
+

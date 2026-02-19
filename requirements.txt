@@ -1,0 +1,33 @@
+# ============================================
+# Radar Automated Test Environment
+# Python Dependencies
+# ============================================
+
+# --- Test Framework ---
+pytest>=7.4.0
+pytest-xdist>=3.5.0          # Parallel test execution
+pytest-timeout>=2.2.0         # Test timeout management
+pytest-ordering>=0.6          # Test execution ordering
+
+# --- Reporting ---
+allure-pytest>=2.13.0         # Allure report generation for Pytest
+allure-python-commons>=2.13.0 # Allure common utilities
+
+# --- Jira / Xray Integration ---
+requests>=2.31.0              # HTTP client for REST API calls
+urllib3>=2.0.0                # HTTP library (requests dependency)
+
+# --- Configuration Management ---
+pyyaml>=6.0.1                 # YAML config file parsing
+jsonschema>=4.20.0            # JSON schema validation for configs
+
+# --- Logging & Utilities ---
+loguru>=0.7.0                 # Enhanced logging
+python-dateutil>=2.8.2        # Date/time utilities
+
+# --- Development & Quality ---
+black>=23.0.0                 # Code formatter
+flake8>=6.1.0                 # Linter
+mypy>=1.7.0                   # Static type checking
+isort>=5.12.0                 # Import sorting
+

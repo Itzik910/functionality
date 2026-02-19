@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "radar-test-environment"
+version = "0.1.0"
+description = "Automated Test Environment for Complex Radar Systems"
+requires-python = ">=3.9"
+license = {text = "Proprietary"}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "functional: Functional verification tests",
+    "durability: Long-running durability tests",
+    "regression: Full regression test suites",
+    "integration: New feature integration tests",
+    "xray(test_id): Map test to Jira Xray Test ID",
+]
+addopts = [
+    "--strict-markers",
+    "-v",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+

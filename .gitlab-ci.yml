@@ -1,0 +1,51 @@
+# ============================================
+# Radar Automated Test Environment
+# GitLab CI/CD Pipeline Configuration (Skeleton)
+# ============================================
+
+stages:
+  - validate
+  - test
+  - report
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+  ALLURE_RESULTS_DIR: "allure-results"
+
+# --- Validate Stage ---
+lint:
+  stage: validate
+  image: python:3.11
+  script:
+    - pip install -r requirements.txt
+    - flake8 src/ tests/
+    - black --check src/ tests/
+    - isort --check src/ tests/
+  allow_failure: true
+
+# --- Test Stage ---
+run_tests:
+  stage: test
+  image: python:3.11
+  script:
+    - pip install -r requirements.txt
+    - python -m pytest tests/ --alluredir=$ALLURE_RESULTS_DIR
+  artifacts:
+    paths:
+      - $ALLURE_RESULTS_DIR
+    expire_in: 7 days
+  # TODO: Integrate with Resource Manager for bench allocation
+  # TODO: Add Jira Xray test set fetching before execution
+
+# --- Report Stage ---
+generate_report:
+  stage: report
+  image: python:3.11
+  script:
+    - echo "Report generation placeholder"
+    # TODO: Generate Allure report
+    # TODO: Upload results to Jira Xray
+  dependencies:
+    - run_tests
+  when: always
+

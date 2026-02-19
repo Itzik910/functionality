@@ -1,0 +1,33 @@
+# Hardware Configuration Example
+# This file defines the hardware setup for a test bench.
+
+test_bench:
+  id: "bench_001"
+  name: "Test Bench Alpha"
+  hardware_type: "radar_v2"
+
+uut:
+  model: "RadarUnit_X100"
+  interface: "ethernet"
+  ip_address: "192.168.1.100"
+  port: 5000
+
+psu:
+  model: "PSU_3000"
+  interface: "serial"
+  port: "COM3"
+  voltage_range:
+    min: 0.0
+    max: 30.0
+  current_limit: 5.0
+
+ptp:
+  enabled: true
+  master_ip: "192.168.1.1"
+  domain: 0
+  sync_timeout_sec: 30
+
+host:
+  ip_address: "192.168.1.10"
+  driver_library: "radar_driver_v2.dll"
+
