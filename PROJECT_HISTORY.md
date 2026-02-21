@@ -38,4 +38,12 @@
 [2026-02-19 | Claude claude-4.6-opus | Implemented ResultReporter (src/jira_client/result_reporter.py) — Xray JSON and JUnit XML export, TestResult/ExecutionReport dataclasses, pass/fail statistics]
 [2026-02-19 | Claude claude-4.6-opus | Created 34 unit tests for Jira Xray integration (tests/test_jira_client.py) — XrayClient, TestMapper, TestResult, ExecutionReport, ResultReporter]
 [2026-02-19 | Claude claude-4.6-opus | Total test suite: 104 tests, all passing in 1.11s]
+[2026-02-21 | Claude claude-4.6-opus | Created config/test_benches.yaml — test bench inventory with 4 benches (X/S/L-band), connection details, health check settings]
+[2026-02-21 | Claude claude-4.6-opus | Created config/schemas/test_benches_schema.json — JSON Schema for bench config validation]
+[2026-02-21 | Claude claude-4.6-opus | Implemented HealthChecker (src/resource_manager/health_check.py) — mock health checks for UUT ping, PSU verify, PTP connectivity with retry logic]
+[2026-02-21 | Claude claude-4.6-opus | Implemented ResourceManager (src/resource_manager/manager.py) — hardware-aware allocation, pre-flight health checks, concurrency locking, ResourceMetadata for reports]
+[2026-02-21 | Claude claude-4.6-opus | Updated scripts/run_tests.py — integrated ResourceManager for bench allocation/release, --hardware-type and --benches-config CLI args]
+[2026-02-21 | Claude claude-4.6-opus | Updated ConfigLoader schema map to include test_benches_schema]
+[2026-02-21 | Claude claude-4.6-opus | Created 34 unit tests for ResourceManager (tests/test_resource_manager.py) — HealthChecker, ResourceManager allocation/release/concurrency, ResourceMetadata, BenchState]
+[2026-02-21 | Claude claude-4.6-opus | Total test suite: 138 tests, all passing in 2.23s]
 

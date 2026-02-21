@@ -232,6 +232,7 @@ class ConfigLoader:
             "hardware_config": "hardware_config_schema",
             "thresholds": "thresholds_schema",
             "test_environment": "test_environment_schema",
+            "test_benches": "test_benches_schema",
         }
         return schema_map.get(stem)
 

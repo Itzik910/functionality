@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "test_benches_schema.json",
+  "title": "Test Benches Configuration Schema",
+  "description": "Defines the physical test bench inventory for automated testing.",
+  "type": "object",
+  "required": ["schema_version", "benches"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version (semver)."
+    },
+    "benches": {
+      "type": "array",
+      "description": "List of available test benches.",
+      "items": {
+        "type": "object",
+        "required": ["bench_id", "hardware_type", "state", "connection"],
+        "properties": {
+          "bench_id": {
+            "type": "string",
+            "description": "Unique identifier for the test bench."
+          },
+          "hardware_type": {
+            "type": "string",
+            "description": "Type of hardware (e.g., radar_x_band, radar_s_band)."
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the bench."
+          },
+          "state": {
+            "type": "string",
+            "enum": ["available", "busy", "maintenance", "offline"],
+            "description": "Current state of the bench."
+          },
+          "connection": {
+            "type": "object",
+            "required": ["uut_ip"],
+            "properties": {
+              "uut_ip": {
+                "type": "string",
+                "description": "UUT IP address."
+              },
+              "uut_port": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535,
+                "description": "UUT port number."
+              },
+              "psu_ip": {
+                "type": "string",
+                "description": "PSU IP address."
+              },
+              "psu_port": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "PSU port/channel number."
+              },
+              "ptp_ip": {
+                "type": "string",
+                "description": "PTP server IP address."
+              }
+            }
+          },
+          "location": {
+            "type": "string",
+            "description": "Physical location of the bench."
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["functional", "durability", "regression", "integration"]
+            },
+            "description": "Test types this bench supports."
+          }
+        }
+      }
+    },
+    "health_check": {
+      "type": "object",
+      "properties": {
+        "ping_timeout_sec": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 5
+        },
+        "psu_verify_timeout_sec": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10
+        },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 2
+        },
+        "mark_offline_on_failure": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}
+

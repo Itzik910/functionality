@@ -1,0 +1,76 @@
+# Test Benches Configuration
+# Defines the physical test bench inventory available for automated testing.
+# Each bench maps a hardware_type to a physical setup with connection details.
+
+schema_version: "1.0.0"
+
+benches:
+  - bench_id: "BENCH-001"
+    hardware_type: "radar_x_band"
+    description: "X-Band Radar Test Bench — Lab A, Rack 1"
+    state: "available"  # available | busy | maintenance | offline
+    connection:
+      uut_ip: "192.168.1.10"
+      uut_port: 5000
+      psu_ip: "192.168.1.20"
+      psu_port: 1
+      ptp_ip: "192.168.1.30"
+    location: "Lab A, Rack 1"
+    capabilities:
+      - "functional"
+      - "durability"
+      - "regression"
+
+  - bench_id: "BENCH-002"
+    hardware_type: "radar_x_band"
+    description: "X-Band Radar Test Bench — Lab A, Rack 2"
+    state: "available"
+    connection:
+      uut_ip: "192.168.1.11"
+      uut_port: 5000
+      psu_ip: "192.168.1.21"
+      psu_port: 2
+      ptp_ip: "192.168.1.31"
+    location: "Lab A, Rack 2"
+    capabilities:
+      - "functional"
+      - "regression"
+
+  - bench_id: "BENCH-003"
+    hardware_type: "radar_s_band"
+    description: "S-Band Radar Test Bench — Lab B, Rack 1"
+    state: "available"
+    connection:
+      uut_ip: "192.168.2.10"
+      uut_port: 5000
+      psu_ip: "192.168.2.20"
+      psu_port: 1
+      ptp_ip: "192.168.2.30"
+    location: "Lab B, Rack 1"
+    capabilities:
+      - "functional"
+      - "durability"
+      - "regression"
+      - "integration"
+
+  - bench_id: "BENCH-004"
+    hardware_type: "radar_l_band"
+    description: "L-Band Radar Test Bench — Lab C, Rack 1"
+    state: "maintenance"
+    connection:
+      uut_ip: "192.168.3.10"
+      uut_port: 5000
+      psu_ip: "192.168.3.20"
+      psu_port: 1
+      ptp_ip: "192.168.3.30"
+    location: "Lab C, Rack 1"
+    capabilities:
+      - "functional"
+
+# Health check settings
+health_check:
+  ping_timeout_sec: 5
+  psu_verify_timeout_sec: 10
+  retry_count: 2
+  mark_offline_on_failure: true
+
