@@ -1,0 +1,130 @@
+# Hardware Configuration — Real Project
+# Defines radar hardware types, PSU, PTP, and network topology.
+
+schema_version: "1.0.0"
+
+# -----------------------------------------------------------------------
+# Project Definitions
+# -----------------------------------------------------------------------
+projects:
+  DR64:
+    description: "VW Project — BSR32 & BSRC radars"
+    radar_types: ["BSR32", "BSRC"]
+    api_package: "bsr_apis"
+    fw_modality: "DR64"
+    test_sets:
+      nightly: "VW Nightly Set"
+      regression: "VW Regression Set"
+      milestone: "VW Milestone Set"
+
+  MBAG:
+    description: "MBAG Project — HRR radars"
+    radar_types: ["HRR"]
+    api_package: "hrr_apis"
+    fw_modality: "DEFAULT"
+    test_sets:
+      nightly: "MBAG Nightly Set"
+      regression: "MBAG Regression Set"
+      milestone: "MBAG Milestone Set"
+
+# -----------------------------------------------------------------------
+# Radar Types
+# -----------------------------------------------------------------------
+radar_types:
+  BSR32:
+    project: "DR64"
+    api_package: "bsr_apis"
+    is_hrr: false
+    default_ip: "192.168.101.190"
+    default_frequency_ghz: 76.128
+    default_modality: "DR64"
+    physical_locations:
+      - "FRONT_CENTER_BOTTOM"
+    ip_range:
+      start: "192.168.101.190"
+      end: "192.168.101.194"
+
+  BSRC:
+    project: "DR64"
+    api_package: "bsr_apis"
+    is_hrr: false
+    default_ip: "192.168.101.190"
+    default_frequency_ghz: 76.623
+    default_modality: "DR64"
+    physical_locations:
+      - "FRONT_RIGHT_BOTTOM"
+      - "FRONT_LEFT_BOTTOM"
+      - "REAR_RIGHT_BOTTOM"
+      - "REAR_LEFT_BOTTOM"
+    ip_range:
+      start: "192.168.101.190"
+      end: "192.168.101.194"
+
+  HRR:
+    project: "MBAG"
+    api_package: "hrr_apis"
+    is_hrr: true
+    default_ip: "192.168.101.190"
+    default_frequency_ghz: 76.128
+    default_modality: "DEFAULT"
+    physical_locations:
+      - "FRONT_CENTER_BOTTOM"
+    ip_range:
+      start: "192.168.101.190"
+      end: "192.168.101.194"
+
+# -----------------------------------------------------------------------
+# Network Topology (per host)
+# -----------------------------------------------------------------------
+network:
+  eth0:
+    purpose: "Radar UUT connection"
+    subnet: "192.168.101.0/24"
+  eth1:
+    purpose: "PSU connection"
+    subnet: "192.168.10.0/24"
+  eth2:
+    purpose: "Corporate network"
+    dhcp: true
+
+# -----------------------------------------------------------------------
+# PSU Configuration — Keysight E36233A
+# -----------------------------------------------------------------------
+psu:
+  model: "Keysight E36233A"
+  description: "Dual Output Autoranging DC Power Supply, 30V, 20A"
+  interface: "ethernet"
+  ip_address: "192.168.10.3"
+  outputs: 2
+  radar_voltage: 12.0
+  radar_current_limit: 10.0
+  voltage_range:
+    min: 0.0
+    max: 30.0
+  current_range:
+    min: 0.0
+    max: 20.0
+  # Shared PSU: Two radars connect to the same PSU (via dumb switch)
+  # Two hosts control the same PSU — requires locking mechanism
+  shared_access: true
+  lock_timeout_sec: 30
+
+# -----------------------------------------------------------------------
+# PTP Configuration
+# -----------------------------------------------------------------------
+ptp:
+  enabled: true
+  transport: "L2"
+  domain: 1
+  config_file_content: |
+    [global]
+    domainNumber 1
+    network_transport L2
+    logSyncInterval -4
+    logAnnounceInterval -2
+    logMinDelayReqInterval -2
+  command_template: "echo '{password}' | sudo -S ptp4l -f {config_file} -E2 -m -H -l 6 -i {interface}"
+  interface: "eth0"
+  # Future: will migrate to gPTP
+  future_protocol: "gPTP"
+

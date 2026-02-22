@@ -1,110 +1,167 @@
 """
 Functional Tests — Radar Basic Operations.
 
-Tests core radar UUT operations using atomic actions:
-- Initialization and connection.
-- Data transmission and reception.
-- Status monitoring.
-- Self-test execution.
+Tests core radar UUT operations using the driver abstraction layer:
+- Connection and heartbeat.
+- Point cloud / SODA data acquisition.
+- State management.
+- Statistics monitoring.
+- Firmware version verification.
 
-Each test demonstrates the atomic action pattern and uses
-Pytest fixtures from conftest.py for hardware orchestration.
+Each test uses the radar_uut fixture from conftest.py which provides
+a RadarDriverBase instance (BSR/HRR/Mock depending on configuration).
 """
 
 from __future__ import annotations
 
 import pytest
 
-from src.actions.base import ActionStatus
+from src.drivers.radar_driver_base import (
+    ConnectStatus,
+    HeartbeatData,
+    PointCloudFrame,
+    StatisticsData,
+)
 
 
 # ---------------------------------------------------------------------------
-# Radar Initialization Tests
+# Radar Connection Tests
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.functional
 @pytest.mark.xray("RADAR-101")
-class TestRadarInitialization:
-    """Tests for radar UUT initialization and connection management."""
+class TestRadarConnection:
+    """Tests for radar UUT connection and basic connectivity."""
 
     def test_radar_connection_established(self, radar_uut) -> None:
         """Verify that the radar UUT connection is established via fixture."""
         assert radar_uut.is_connected, "Radar UUT should be connected after fixture init"
 
-    def test_radar_status_after_init(self, radar_uut) -> None:
-        """Verify radar reports operational status after initialization."""
-        result = radar_uut.get_status()
+    def test_radar_ping(self, radar_uut) -> None:
+        """Verify that the radar responds to ping."""
+        assert radar_uut.ping() is True, "Radar should respond to ping"
 
-        assert result.is_success, f"Get status failed: {result.error}"
-        assert result.data["operational"] is True
-        assert "firmware_version" in result.data
+    def test_radar_fw_version(self, radar_uut) -> None:
+        """Verify that firmware version is reported."""
+        fw = radar_uut.fw_version
+        assert fw, "Firmware version should not be empty"
+        assert isinstance(fw, str)
 
 
 # ---------------------------------------------------------------------------
-# Radar Data Transmission Tests
+# Radar Heartbeat Tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.functional
+@pytest.mark.xray("RADAR-104")
+class TestRadarHeartbeat:
+    """Tests for radar heartbeat monitoring."""
+
+    def test_heartbeat_received(self, radar_uut) -> None:
+        """Verify that a heartbeat message is received."""
+        hb = radar_uut.get_heartbeat(timeout=5)
+        assert hb is not None, "Should receive a heartbeat"
+        assert isinstance(hb, HeartbeatData)
+
+    def test_heartbeat_has_valid_data(self, radar_uut) -> None:
+        """Verify heartbeat contains expected data fields."""
+        hb = radar_uut.get_heartbeat(timeout=5)
+        assert hb is not None
+        assert hb.beat_id > 0
+        assert hb.status == "OK"
+        assert hb.sensor_type != ""
+
+    def test_heartbeat_reports_temperatures(self, radar_uut) -> None:
+        """Verify heartbeat includes temperature readings."""
+        hb = radar_uut.get_heartbeat(timeout=5)
+        assert hb is not None
+        assert len(hb.temperatures) > 0
+        for temp_name, temp_val in hb.temperatures.items():
+            assert 0 < temp_val < 100, f"Temperature {temp_name}={temp_val}°C out of range"
+
+
+# ---------------------------------------------------------------------------
+# Radar Data Acquisition Tests
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.functional
 @pytest.mark.xray("RADAR-102")
-class TestRadarDataTransmission:
-    """Tests for radar data transmission and reception."""
+class TestRadarDataAcquisition:
+    """Tests for radar point cloud / SODA frame acquisition."""
 
-    def test_transmit_data(self, radar_uut) -> None:
-        """Verify that data can be transmitted to the radar UUT."""
-        payload = b"\x01\x02\x03\x04\x05"
-        result = radar_uut.transmit_data(payload=payload)
+    def test_point_cloud_received(self, radar_uut) -> None:
+        """Verify that a point cloud frame is received."""
+        pc = radar_uut.get_point_cloud(timeout=5)
+        assert pc is not None, "Should receive a point cloud frame"
+        assert isinstance(pc, PointCloudFrame)
 
-        assert result.is_success, f"Transmit failed: {result.error}"
-        assert result.data["bytes_sent"] == len(payload)
+    def test_point_cloud_has_detections(self, radar_uut) -> None:
+        """Verify that point cloud contains valid detections."""
+        pc = radar_uut.get_point_cloud(timeout=5)
+        assert pc is not None
+        assert pc.valid_detections > 0
+        assert len(pc.detections) == pc.valid_detections
 
-    def test_receive_data(self, radar_uut) -> None:
-        """Verify that data can be received from the radar UUT."""
-        result = radar_uut.receive_data(timeout_sec=5.0)
+    def test_point_cloud_detection_fields(self, radar_uut) -> None:
+        """Verify that detections have required coordinate fields."""
+        pc = radar_uut.get_point_cloud(timeout=5)
+        assert pc is not None
+        assert len(pc.detections) > 0
+        det = pc.detections[0]
+        assert hasattr(det, "distance")
+        assert hasattr(det, "azimuth")
+        assert hasattr(det, "velocity")
+        assert hasattr(det, "rcs")
 
-        assert result.is_success, f"Receive failed: {result.error}"
-        assert result.data["bytes_received"] > 0
-        assert "data" in result.data
-
-    def test_transmit_empty_payload_rejected(self, radar_uut) -> None:
-        """Verify that transmitting with invalid payload is properly handled."""
-        result = radar_uut.transmit_data(payload="not_bytes")
-
-        assert result.is_failure, "Should fail with non-bytes payload"
-        assert result.status == ActionStatus.ERROR
-
-    def test_transmit_reports_timing(self, radar_uut) -> None:
-        """Verify that transmission reports execution timing."""
-        payload = b"\xAA\xBB\xCC"
-        result = radar_uut.transmit_data(payload=payload)
-
-        assert result.duration_ms >= 0
-        assert result.duration_ms < 10000  # Should complete within 10s
+    def test_point_cloud_cycle_counter(self, radar_uut) -> None:
+        """Verify that cycle counter increments across frames."""
+        pc1 = radar_uut.get_point_cloud(timeout=5)
+        pc2 = radar_uut.get_point_cloud(timeout=5)
+        assert pc1 is not None and pc2 is not None
+        assert pc2.cycle_count > pc1.cycle_count
 
 
 # ---------------------------------------------------------------------------
-# Radar Self-Test
+# Radar State Management Tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.functional
+@pytest.mark.xray("RADAR-105")
+class TestRadarStateManagement:
+    """Tests for radar state transitions."""
+
+    def test_set_state_scanning(self, radar_uut) -> None:
+        """Verify radar can be moved to SCANNING state."""
+        assert radar_uut.set_state("SCANNING") is True
+        assert radar_uut.state == "SCANNING"
+
+    def test_set_state_standby(self, radar_uut) -> None:
+        """Verify radar can be moved to STANDBY state."""
+        assert radar_uut.set_state("STANDBY") is True
+        assert radar_uut.state == "STANDBY"
+
+
+# ---------------------------------------------------------------------------
+# Radar Statistics Tests
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.functional
 @pytest.mark.xray("RADAR-103")
-class TestRadarSelfTest:
-    """Tests for the radar built-in self-test."""
+class TestRadarStatistics:
+    """Tests for radar runtime statistics monitoring."""
 
-    def test_self_test_passes(self, radar_uut) -> None:
-        """Verify that the radar self-test reports all subsystems as operational."""
-        result = radar_uut.run_self_test()
+    def test_statistics_fps(self, radar_uut) -> None:
+        """Verify FPS statistics are reported."""
+        stats = radar_uut.get_statistics()
+        assert isinstance(stats, StatisticsData)
+        assert stats.fps_mean > 0, "FPS mean should be positive"
 
-        assert result.is_success, f"Self-test failed: {result.error}"
-        assert result.data["self_test_passed"] is True
-        assert result.data["tests_failed"] == 0
-
-    def test_self_test_reports_all_tests(self, radar_uut) -> None:
-        """Verify that the self-test reports the number of tests run."""
-        result = radar_uut.run_self_test()
-
-        assert result.data["tests_run"] > 0
-        assert result.data["tests_passed"] == result.data["tests_run"]
-
+    def test_statistics_latency(self, radar_uut) -> None:
+        """Verify latency statistics are reported."""
+        stats = radar_uut.get_statistics()
+        assert stats.latency_mean_ms > 0, "Latency should be positive"

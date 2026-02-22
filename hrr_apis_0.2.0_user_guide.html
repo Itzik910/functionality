@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>HRR API User Guide</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+  </style>
+  <style type="text/css">
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+line-height: 1.6;
+max-width: 1200px;
+margin: 0 auto;
+padding: 2rem;
+background-color: #ffffff;
+color: #333;
+}
+h1, h2, h3, h4, h5, h6 {
+color: #0071c5;
+margin-top: 1.5em;
+margin-bottom: 0.5em;
+font-weight: 600;
+}
+h1 {
+border-bottom: 3px solid #0071c5;
+padding-bottom: 0.3em;
+font-size: 2.5em;
+}
+h2 {
+border-bottom: 2px solid #e0e0e0;
+padding-bottom: 0.3em;
+font-size: 2em;
+}
+h3 {
+font-size: 1.5em;
+}
+h4 {
+font-size: 1.25em;
+}
+code {
+background-color: #f4f4f4;
+padding: 0.2em 0.4em;
+border-radius: 3px;
+font-family: "Courier New", Courier, monospace;
+font-size: 0.9em;
+color: #c7254e;
+}
+pre {
+background-color: #f8f8f8;
+border: 1px solid #ddd;
+border-radius: 4px;
+padding: 1em;
+overflow-x: auto;
+}
+pre code {
+background-color: transparent;
+padding: 0;
+color: inherit;
+}
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.5em 0;
+}
+th, td {
+border: 1px solid #ddd;
+padding: 0.75em;
+text-align: left;
+}
+th {
+background-color: #0071c5;
+color: white;
+font-weight: 600;
+}
+tr:nth-child(even) {
+background-color: #f9f9f9;
+}
+tr:hover {
+background-color: #f5f5f5;
+}
+a {
+color: #0071c5;
+text-decoration: none;
+}
+a:hover {
+text-decoration: underline;
+}
+blockquote {
+border-left: 4px solid #0071c5;
+padding-left: 1em;
+margin-left: 0;
+color: #666;
+font-style: italic;
+}
+ul, ol {
+margin: 1em 0;
+padding-left: 2em;
+}
+li {
+margin: 0.5em 0;
+}
+hr {
+border: none;
+border-top: 2px solid #e0e0e0;
+margin: 2em 0;
+}
+
+#TOC {
+background-color: #f8f8f8;
+border: 1px solid #ddd;
+border-radius: 4px;
+padding: 1.5em;
+margin-bottom: 2em;
+}
+#TOC ul {
+list-style-type: none;
+padding-left: 1em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a {
+color: #333;
+}
+#TOC a:hover {
+color: #0071c5;
+}
+
+.sourceCode {
+background-color: #f8f8f8;
+}
+
+td code, th code {
+background-color: rgba(255, 255, 255, 0.7);
+}
+
+@media print {
+body {
+max-width: 100%;
+padding: 1cm;
+}
+pre, code {
+border: 1px solid #ddd;
+}
+a {
+color: #000;
+text-decoration: underline;
+}
+}
+</style>
+</head>
+<body>
+<nav id="TOC">
+<ul>
+<li><a href="#hrr-api-user-guide">HRR API User Guide</a></li>
+<li><a href="#hrr-apis-0.2.0">HRR APIs 0.2.0</a><ul>
+<li><a href="#about">About</a></li>
+<li><a href="#spec">Spec</a><ul>
+<li><a href="#network-configuration">Network Configuration</a></li>
+</ul></li>
+<li><a href="#quick-start">Quick Start</a><ul>
+<li><a href="#basic-usage-recommended---context-manager">Basic Usage (Recommended - Context Manager)</a></li>
+<li><a href="#manual-connection-management">Manual Connection Management</a></li>
+</ul></li>
+<li><a href="#api-reference">API Reference</a><ul>
+<li><a href="#connection">Connection</a></li>
+<li><a href="#data-acquisition">Data Acquisition</a></li>
+<li><a href="#recording">Recording</a></li>
+</ul></li>
+<li><a href="#complete-example">Complete Example</a></li>
+<li><a href="#reading-recorded-data">Reading Recorded Data</a><ul>
+<li><a href="#reading-soda-files">Reading SODA Files</a></li>
+<li><a href="#reading-heartbeat-files">Reading Heartbeat Files</a></li>
+<li><a href="#reading-metadata">Reading Metadata</a></li>
+</ul></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a><ul>
+<li><a href="#fota-not-working-or-no-data-of-any-kind-recieved">FOTA not working or no data of any kind recieved</a></li>
+<li><a href="#no-soda-data-received">No SODA data received</a></li>
+<li><a href="#no-heartbeat-received">No Heartbeat received</a></li>
+<li><a href="#recording-fails-to-start">Recording fails to start</a></li>
+<li><a href="#low-fps-or-high-latency">Low FPS or High Latency</a></li>
+<li><a href="#database-hash-mismatch">Database Hash Mismatch</a></li>
+</ul></li>
+<li><a href="#notes">Notes</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="hrr-api-user-guide">HRR API User Guide</h1>
+<h1 id="hrr-apis-0.2.0">HRR APIs 0.2.0</h1>
+<h2 id="about">About</h2>
+<p>Python API for HRR (High Resolution Radar) sensor communication and data recording.</p>
+<hr />
+<h2 id="spec">Spec</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td>Package version</td>
+<td>0.2.0</td>
+</tr>
+<tr class="even">
+<td>Supported Python versions</td>
+<td>3.8 &lt;= version &lt;= 3.12</td>
+</tr>
+<tr class="odd">
+<td>Supported OS</td>
+<td>Ubuntu</td>
+</tr>
+<tr class="even">
+<td>Supported FW version</td>
+<td>v4.6.5-40-gb2c16779</td>
+</tr>
+<tr class="odd">
+<td>Supported BSR types</td>
+<td>BSR32, BSRC</td>
+</tr>
+<tr class="even">
+<td>A2A Module Hash</td>
+<td>g23bae95</td>
+</tr>
+</tbody>
+</table>
+<h3 id="network-configuration">Network Configuration</h3>
+<p>Set the socket receive buffer size (required for UDP data reception):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Temporary (until reboot)</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="fu">sudo</span> sysctl -w net.core.rmem_max=67108864</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Permanent</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="bu">echo</span> <span class="st">&quot;net.core.rmem_max=67108864&quot;</span> <span class="kw">|</span> <span class="fu">sudo</span> tee -a /etc/sysctl.conf</a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="bu">echo</span> <span class="st">&quot;net.core.netdev_max_backlog=30000&quot;</span> <span class="kw">|</span> <span class="fu">sudo</span> tee -a /etc/sysctl.conf</a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="fu">sudo</span> sysctl -p</a></code></pre></div>
+<hr />
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="basic-usage-recommended---context-manager">Basic Usage (Recommended - Context Manager)</h3>
+<p>Using a context manager (<code>with</code> statement) is <strong>recommended</strong> as it automatically handles connection cleanup:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb2-1" title="1"><span class="im">from</span> hrr_apis <span class="im">import</span> Radar</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="co"># Context manager automatically handles connect/disconnect</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="cf">with</span> Radar(ip<span class="op">=</span><span class="st">&#39;192.168.1.31&#39;</span>) <span class="im">as</span> radar:</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="co"># Connect to radar</span></a>
+<a class="sourceLine" id="cb2-6" title="6">    connect_response <span class="op">=</span> radar.<span class="ex">connect</span>()</a>
+<a class="sourceLine" id="cb2-7" title="7">    <span class="cf">if</span> <span class="kw">not</span> connect_response.status <span class="op">==</span> ConnectResponseStatus.OK:</a>
+<a class="sourceLine" id="cb2-8" title="8">        <span class="bu">print</span>(<span class="ss">f&quot;Connection failed: </span><span class="sc">{</span>connect_response<span class="sc">.</span>status<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb2-9" title="9">        <span class="cf">return</span></a>
+<a class="sourceLine" id="cb2-10" title="10">    </a>
+<a class="sourceLine" id="cb2-11" title="11">    <span class="co"># Get SODA data</span></a>
+<a class="sourceLine" id="cb2-12" title="12">    soda <span class="op">=</span> radar.get_soda()</a>
+<a class="sourceLine" id="cb2-13" title="13">    <span class="cf">if</span> soda:</a>
+<a class="sourceLine" id="cb2-14" title="14">        <span class="bu">print</span>(<span class="ss">f&quot;Received SODA with </span><span class="sc">{</span><span class="bu">len</span>(soda.detections)<span class="sc">}</span><span class="ss"> detections&quot;</span>)</a>
+<a class="sourceLine" id="cb2-15" title="15">    </a>
+<a class="sourceLine" id="cb2-16" title="16">    <span class="co"># Start recording</span></a>
+<a class="sourceLine" id="cb2-17" title="17">    radar.start_recording(<span class="st">&quot;~/recordings/my_session&quot;</span>)</a>
+<a class="sourceLine" id="cb2-18" title="18">    </a>
+<a class="sourceLine" id="cb2-19" title="19">    <span class="co"># ... do work ...</span></a>
+<a class="sourceLine" id="cb2-20" title="20">    </a>
+<a class="sourceLine" id="cb2-21" title="21">    <span class="co"># Stop recording</span></a>
+<a class="sourceLine" id="cb2-22" title="22">    radar.stop_recording()</a>
+<a class="sourceLine" id="cb2-23" title="23"></a>
+<a class="sourceLine" id="cb2-24" title="24"><span class="co"># Disconnect happens automatically when exiting &#39;with&#39; block</span></a></code></pre></div>
+<h3 id="manual-connection-management">Manual Connection Management</h3>
+<p>If you need manual control:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" title="1"><span class="im">from</span> hrr_apis <span class="im">import</span> Radar</a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3">radar <span class="op">=</span> Radar(ip<span class="op">=</span><span class="st">&#39;192.168.1.31&#39;</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># Connect</span></a>
+<a class="sourceLine" id="cb3-6" title="6">connect_response <span class="op">=</span> radar.<span class="ex">connect</span>()</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="cf">if</span> <span class="kw">not</span> connect_response.status <span class="op">==</span> ConnectResponseStatus.OK:</a>
+<a class="sourceLine" id="cb3-8" title="8">    <span class="bu">print</span>(<span class="ss">f&quot;Connection failed&quot;</span>)</a>
+<a class="sourceLine" id="cb3-9" title="9">    </a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co"># ... your code ...</span></a>
+<a class="sourceLine" id="cb3-11" title="11"></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co"># Always disconnect when done</span></a>
+<a class="sourceLine" id="cb3-13" title="13">radar.disconnect()</a></code></pre></div>
+<hr />
+<h2 id="api-reference">API Reference</h2>
+<h3 id="connection">Connection</h3>
+<h4 id="connectping_timeout-optionalint-10---connectresponse"><code>connect(ping_timeout: Optional[int] = 10) -&gt; ConnectResponse</code></h4>
+<p>Establishes connection to the radar.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">def</span> <span class="ex">connect</span>(<span class="va">self</span>, ping_timeout: Optional[<span class="bu">int</span>] <span class="op">=</span> <span class="dv">10</span>) <span class="op">-&gt;</span> ConnectResponse</a></code></pre></div>
+<p><strong>Parameters:</strong> - <code>ping_timeout</code>: Optional timeout in seconds for ping check (default: 10)</p>
+<p><strong>Returns:</strong> <code>ConnectResponse</code> with status</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb5-1" title="1">response <span class="op">=</span> radar.<span class="ex">connect</span>(ping_timeout<span class="op">=</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="cf">if</span> response.status <span class="op">==</span> ConnectResponseStatus.OK:</a>
+<a class="sourceLine" id="cb5-3" title="3">    <span class="bu">print</span>(<span class="st">&quot;Connected successfully&quot;</span>)</a></code></pre></div>
+<h4 id="disconnect---none"><code>disconnect() -&gt; None</code></h4>
+<p>Disconnects from the radar and cleans up resources.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">def</span> disconnect(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span></a></code></pre></div>
+<p><strong>Note:</strong> Automatically called when using context manager.</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb7-1" title="1">radar.disconnect()</a></code></pre></div>
+<hr />
+<h3 id="data-acquisition">Data Acquisition</h3>
+<h4 id="get_sodatimeout-optionalint-5---optionalsoda"><code>get_soda(timeout: Optional[int] = 5) -&gt; Optional[SODA]</code></h4>
+<p>Retrieves a single SODA (Sensor Output Detection Array) frame.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">def</span> get_soda(<span class="va">self</span>, timeout: Optional[<span class="bu">int</span>] <span class="op">=</span> <span class="dv">5</span>) <span class="op">-&gt;</span> Optional[SODA]</a></code></pre></div>
+<p><strong>Parameters:</strong> - <code>timeout</code>: Optional wait timeout in seconds (default: 5)</p>
+<p><strong>Returns:</strong> <code>SODA</code> object or <code>None</code> if timeout</p>
+<p><strong>SODA Object Attributes:</strong> - <code>latency</code>: Processing latency in milliseconds - <code>e2e_data</code>: End-to-end protocol header - <code>generic_header</code>: Generic sensor header (cycle count, timestamp, etc.) - <code>radar_header</code>: Radar-specific header (detection count, valid detection count, etc.) - <code>detections</code>: NumPy structured array of radar detections with fields: - <code>HRR_F_Dtctn_Dist</code>: Distance - <code>HRR_F_Dtctn_Azi</code>: Azimuth - <code>HRR_F_Dtctn_Elev</code>: Elevation - <code>HRR_F_Dtctn_RadVelo</code>: Radial velocity - <code>HRR_F_Dtctn_RCS</code>: Radar cross-section - <code>x</code>, <code>y</code>, <code>z</code>: Calculated 3D coordinates (in right-handed system: X-Forward, Y-Left, Z-Up)</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb9-1" title="1">soda <span class="op">=</span> radar.get_soda(timeout<span class="op">=</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="cf">if</span> soda:</a>
+<a class="sourceLine" id="cb9-3" title="3">    <span class="bu">print</span>(<span class="ss">f&quot;Cycle: </span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_Cycl_Count&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb9-4" title="4">    <span class="bu">print</span>(<span class="ss">f&quot;Valid Detections: </span><span class="sc">{</span>soda<span class="sc">.</span>radar_header[<span class="st">&#39;HRR_F_ValidDtctn&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb9-5" title="5">    <span class="bu">print</span>(<span class="ss">f&quot;Timestamp: </span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_TmStmp_Sec&#39;</span>]<span class="sc">}</span><span class="ss">.</span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_TmStmp_NanoSec&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb9-6" title="6">    </a>
+<a class="sourceLine" id="cb9-7" title="7">    <span class="co"># Access detection data (note: detections already filtered to valid count)</span></a>
+<a class="sourceLine" id="cb9-8" title="8">    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(soda.detections)):</a>
+<a class="sourceLine" id="cb9-9" title="9">        det <span class="op">=</span> soda.detections[i]</a>
+<a class="sourceLine" id="cb9-10" title="10">        <span class="bu">print</span>(<span class="ss">f&quot;Detection </span><span class="sc">{i}</span><span class="ss">:&quot;</span>)</a>
+<a class="sourceLine" id="cb9-11" title="11">        <span class="bu">print</span>(<span class="ss">f&quot;  Distance: </span><span class="sc">{</span>det[<span class="st">&#39;HRR_F_Dtctn_Dist&#39;</span>] <span class="op">*</span> <span class="fl">0.005</span><span class="sc">}</span><span class="ss"> m&quot;</span>)</a>
+<a class="sourceLine" id="cb9-12" title="12">        <span class="bu">print</span>(<span class="ss">f&quot;  Position (x,y,z): (</span><span class="sc">{</span>det[<span class="st">&#39;x&#39;</span>]<span class="sc">:.2f}</span><span class="ss">, </span><span class="sc">{</span>det[<span class="st">&#39;y&#39;</span>]<span class="sc">:.2f}</span><span class="ss">, </span><span class="sc">{</span>det[<span class="st">&#39;z&#39;</span>]<span class="sc">:.2f}</span><span class="ss">) m&quot;</span>)</a>
+<a class="sourceLine" id="cb9-13" title="13">        <span class="bu">print</span>(<span class="ss">f&quot;  Velocity: </span><span class="sc">{</span>det[<span class="st">&#39;HRR_F_Dtctn_RadVelo&#39;</span>]<span class="sc">}</span><span class="ss"> m/s&quot;</span>)</a>
+<a class="sourceLine" id="cb9-14" title="14">        <span class="bu">print</span>(<span class="ss">f&quot;  RCS: </span><span class="sc">{</span>det[<span class="st">&#39;HRR_F_Dtctn_RCS&#39;</span>]<span class="sc">}</span><span class="ss"> dBsm&quot;</span>)</a></code></pre></div>
+<h4 id="get_heartbeattimeout-optionalunionint-float-5---optionalheartbeat"><code>get_heartbeat(timeout: Optional[Union[int, float]] = 5) -&gt; Optional[Heartbeat]</code></h4>
+<p>Retrieves a single heartbeat message containing sensor status and health information.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">def</span> get_heartbeat(<span class="va">self</span>, timeout: Optional[Union[<span class="bu">int</span>, <span class="bu">float</span>]] <span class="op">=</span> <span class="dv">5</span>) <span class="op">-&gt;</span> Optional[Heartbeat]</a></code></pre></div>
+<p><strong>Parameters:</strong> - <code>timeout</code>: Optional wait timeout in seconds (default: 5, can be float)</p>
+<p><strong>Returns:</strong> <code>Heartbeat</code> object or <code>None</code> if timeout</p>
+<p><strong>Heartbeat Object Attributes:</strong> - <code>latency</code>: Processing latency in milliseconds - <code>protocol_version</code>: Protocol version number - <code>beat_id</code>: Heartbeat sequence ID - <code>timestamp_sec</code>, <code>timestamp_nsec</code>: Sensor timestamp - <code>sensor_id</code>, <code>sensor_type</code>: Sensor identification - <code>status</code>: Sensor status code - <code>versions</code>: Version information (FW, DB hashes, serial numbers, SKUs) - <code>temperatures</code>: Temperature readings from various sensor components - <code>voltages</code>: Voltage readings from power supplies and RFICs - <code>rfic_temperatures</code>: RFIC-specific temperature readings - <code>error_counters</code>: Various error counter fields - <code>links</code>: Network interface status (1G and 10G interfaces)</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb11-1" title="1">heartbeat <span class="op">=</span> radar.get_heartbeat(timeout<span class="op">=</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="cf">if</span> heartbeat:</a>
+<a class="sourceLine" id="cb11-3" title="3">    <span class="bu">print</span>(<span class="ss">f&quot;Beat ID: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>beat_id<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb11-4" title="4">    <span class="bu">print</span>(<span class="ss">f&quot;Status: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>status<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb11-5" title="5">    <span class="bu">print</span>(<span class="ss">f&quot;FW Version: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>versions<span class="sc">.</span>fw_main_app_ver_high<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb11-6" title="6">    <span class="bu">print</span>(<span class="ss">f&quot;BPU SN: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>versions<span class="sc">.</span>bpu_sn<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb11-7" title="7">    </a>
+<a class="sourceLine" id="cb11-8" title="8">    <span class="co"># Check temperatures (if available)</span></a>
+<a class="sourceLine" id="cb11-9" title="9">    <span class="cf">if</span> heartbeat.temperatures:</a>
+<a class="sourceLine" id="cb11-10" title="10">        <span class="bu">print</span>(<span class="ss">f&quot;TSIP 0: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>temperatures<span class="sc">.</span>tsip_0<span class="sc">}</span><span class="ss">°C&quot;</span>)</a>
+<a class="sourceLine" id="cb11-11" title="11">    </a>
+<a class="sourceLine" id="cb11-12" title="12">    <span class="co"># Check network links</span></a>
+<a class="sourceLine" id="cb11-13" title="13">    <span class="cf">if</span> heartbeat.links.interface_1g.status:</a>
+<a class="sourceLine" id="cb11-14" title="14">        <span class="bu">print</span>(<span class="ss">f&quot;1G Link Status: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>links<span class="sc">.</span>interface_1g<span class="sc">.</span>status<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb11-15" title="15">        <span class="bu">print</span>(<span class="ss">f&quot;1G Link Speed: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>links<span class="sc">.</span>interface_1g<span class="sc">.</span>speed<span class="sc">}</span><span class="ss">&quot;</span>)</a></code></pre></div>
+<h4 id="get_statistics---statistics"><code>get_statistics() -&gt; Statistics</code></h4>
+<p>Retrieves current runtime statistics including FPS, latency, drops, and sensor health metrics.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">def</span> get_statistics(<span class="va">self</span>) <span class="op">-&gt;</span> Statistics</a></code></pre></div>
+<p><strong>Parameters:</strong> None</p>
+<p><strong>Returns:</strong> <code>Statistics</code> object (always returns, never None)</p>
+<p><strong>Statistics Object Attributes:</strong> - <code>fps</code>: Frame rate statistics (current, min, max, mean, std) - <code>current</code>, <code>minimum</code>, <code>maximum</code>, <code>mean</code>, <code>std</code> - <code>latency</code>: Latency statistics in milliseconds (current, min, max, mean, std) - <code>current</code>, <code>minimum</code>, <code>maximum</code>, <code>mean</code>, <code>std</code> - <code>internal_latency</code>: Internal sensor pipeline latency statistics with grouped statistics for each pipeline stage: - <code>min</code>, <code>max</code>, <code>std</code>, <code>average</code>, <code>window_size</code>: Each contains latency metrics for: - <code>pc1</code>: Point cloud 1 processing latency - <code>pc2</code>: Point cloud 2 processing latency - <code>ego</code>: Ego motion processing latency - <code>tilt</code>: Tilt processing latency - <code>imu</code>: IMU processing latency - <code>pc1_supplementary</code>: Point cloud 1 supplementary data latency - <code>pc2_events</code>: Point cloud 2 events latency - <code>phd_states</code>: PHD states processing latency - <code>ego_events</code>: Ego events latency - <code>ego_state</code>: Ego state latency - <code>pipe_iq</code>: Pipeline IQ data latency - <code>pipe_xcorr</code>: Pipeline cross-correlation latency - <code>pipe_doppler</code>: Pipeline Doppler latency - <code>pipe_rdbins</code>: Pipeline range-Doppler bins latency - <code>pipe_rdaod</code>: Pipeline range-Doppler AOD latency - <code>rdc</code>: Range-Doppler-Azimuth processing latency - <code>drops_counters</code>: Message drop counters for different message types - <code>temperatures</code>: Temperature statistics (current, min, max, mean, std) - <code>sync_loss_counter</code>: Synchronization loss counter - <code>unexpected_reset_counter</code>: Unexpected reset counter - <code>core_dump_counter</code>: Core dump counter - <code>error_counters</code>: Various error counters from heartbeat - <code>fw_logs_counters</code>: Firmware log counters (if RTool enabled) - <code>links</code>: Network interface statistics</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb13-1" title="1">stats <span class="op">=</span> radar.get_statistics()</a>
+<a class="sourceLine" id="cb13-2" title="2"></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="co"># FPS statistics</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="bu">print</span>(<span class="ss">f&quot;Current FPS: </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>current<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="bu">print</span>(<span class="ss">f&quot;Average FPS: </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>mean<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="bu">print</span>(<span class="ss">f&quot;FPS Range: </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>minimum<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>maximum<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb13-7" title="7"></a>
+<a class="sourceLine" id="cb13-8" title="8"><span class="co"># Latency statistics</span></a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="bu">print</span>(<span class="ss">f&quot;Current Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>latency<span class="sc">.</span>current<span class="sc">}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="bu">print</span>(<span class="ss">f&quot;Average Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>latency<span class="sc">.</span>mean<span class="sc">}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb13-11" title="11"></a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="co"># Internal latency statistics (pipeline stages)</span></a>
+<a class="sourceLine" id="cb13-13" title="13"><span class="cf">if</span> stats.internal_latency.average.pc1 <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</a>
+<a class="sourceLine" id="cb13-14" title="14">    <span class="bu">print</span>(<span class="ss">f&quot;PC1 Average Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>internal_latency<span class="sc">.</span>average<span class="sc">.</span>pc1<span class="sc">:.2f}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb13-15" title="15">    <span class="bu">print</span>(<span class="ss">f&quot;PC1 Max Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>internal_latency<span class="sc">.</span><span class="bu">max</span><span class="sc">.</span>pc1<span class="sc">:.2f}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb13-16" title="16"><span class="cf">if</span> stats.internal_latency.average.ego <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</a>
+<a class="sourceLine" id="cb13-17" title="17">    <span class="bu">print</span>(<span class="ss">f&quot;Ego Average Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>internal_latency<span class="sc">.</span>average<span class="sc">.</span>ego<span class="sc">:.2f}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb13-18" title="18"><span class="cf">if</span> stats.internal_latency.average.rdc <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</a>
+<a class="sourceLine" id="cb13-19" title="19">    <span class="bu">print</span>(<span class="ss">f&quot;RDC Average Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>internal_latency<span class="sc">.</span>average<span class="sc">.</span>rdc<span class="sc">:.2f}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb13-20" title="20"></a>
+<a class="sourceLine" id="cb13-21" title="21"><span class="co"># Drop counters</span></a>
+<a class="sourceLine" id="cb13-22" title="22"><span class="bu">print</span>(<span class="ss">f&quot;Dropped messages: </span><span class="sc">{</span>stats<span class="sc">.</span>drops_counters<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb13-23" title="23"></a>
+<a class="sourceLine" id="cb13-24" title="24"><span class="co"># Temperature statistics (if available)</span></a>
+<a class="sourceLine" id="cb13-25" title="25"><span class="cf">if</span> stats.temperatures.current:</a>
+<a class="sourceLine" id="cb13-26" title="26">    <span class="bu">print</span>(<span class="ss">f&quot;Current Temperature: </span><span class="sc">{</span>stats<span class="sc">.</span>temperatures<span class="sc">.</span>current<span class="sc">}</span><span class="ss">°C&quot;</span>)</a>
+<a class="sourceLine" id="cb13-27" title="27">    <span class="bu">print</span>(<span class="ss">f&quot;Max Temperature: </span><span class="sc">{</span>stats<span class="sc">.</span>temperatures<span class="sc">.</span>maximum<span class="sc">}</span><span class="ss">°C&quot;</span>)</a>
+<a class="sourceLine" id="cb13-28" title="28"></a>
+<a class="sourceLine" id="cb13-29" title="29"><span class="co"># Error counters</span></a>
+<a class="sourceLine" id="cb13-30" title="30"><span class="cf">if</span> stats.error_counters:</a>
+<a class="sourceLine" id="cb13-31" title="31">    <span class="bu">print</span>(<span class="ss">f&quot;Frame time errors: </span><span class="sc">{</span>stats<span class="sc">.</span>error_counters<span class="sc">.</span>frame_time<span class="sc">}</span><span class="ss">&quot;</span>)</a></code></pre></div>
+<hr />
+<h3 id="recording">Recording</h3>
+<h4 id="start_recordingout_dir-str-amount-optionalint-none---bool"><code>start_recording(out_dir: str, amount: Optional[int] = None) -&gt; bool</code></h4>
+<p>Starts recording SODA frames to HDF5 files. Also downloads and validates configuration databases from the sensor.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">def</span> start_recording(<span class="va">self</span>, out_dir: <span class="bu">str</span>, amount: Optional[<span class="bu">int</span>] <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></a></code></pre></div>
+<p><strong>Parameters:</strong> - <code>out_dir</code>: Output directory path (will be created if doesn’t exist) - If directory exists, a timestamp suffix will be automatically added - <code>~</code> home directory expansion is supported - <code>amount</code>: Optional number of frames to record (default: None = continuous recording) - When set, recording stops automatically after capturing the specified number of frames</p>
+<p><strong>Returns:</strong> <code>True</code> if recording started successfully, <code>False</code> otherwise</p>
+<p><strong>Failure Conditions:</strong> - Insufficient disk space (&lt; 1 GB free) - Permission denied for creating directory - Recording already in progress</p>
+<p><strong>Output Structure:</strong></p>
+<pre><code>out_dir/
+├── soda/
+│   ├── soda_seq_0_ts_1234567890.123456789.h5
+│   ├── soda_seq_1_ts_1234567891.123456789.h5
+│   └── ...
+├── heartbeat/
+│   └── heartbeat_*.json
+├── db/
+│   ├── algo_root_db.bin
+│   ├── pp_root_db.bin
+│   ├── rmgr_db.bin
+│   └── calib_db.bin (if available)
+├── metadata.json
+└── logs.log</code></pre>
+<p><strong>What Gets Recorded:</strong> - SODA frames with all detection data (including x, y, z coordinates) - Heartbeat messages - Configuration databases (algo, pp, rmgr, calib) with hash verification - Session metadata (IP, MAC, FW version, operation mode, etc.) - All API logs during recording session</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># Continuous recording</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="cf">if</span> radar.start_recording(<span class="st">&quot;~/data/session_001&quot;</span>):</a>
+<a class="sourceLine" id="cb16-3" title="3">    <span class="bu">print</span>(<span class="st">&quot;Recording started&quot;</span>)</a>
+<a class="sourceLine" id="cb16-4" title="4">    time.sleep(<span class="dv">60</span>)  <span class="co"># Record for 60 seconds</span></a>
+<a class="sourceLine" id="cb16-5" title="5">    radar.stop_recording()</a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb16-7" title="7">    <span class="bu">print</span>(<span class="st">&quot;Failed to start recording&quot;</span>)</a>
+<a class="sourceLine" id="cb16-8" title="8"></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="co"># Frame-limited recording (stops automatically after 100 frames)</span></a>
+<a class="sourceLine" id="cb16-10" title="10"><span class="cf">if</span> radar.start_recording(<span class="st">&quot;~/data/session_002&quot;</span>, amount<span class="op">=</span><span class="dv">100</span>):</a>
+<a class="sourceLine" id="cb16-11" title="11">    <span class="bu">print</span>(<span class="st">&quot;Recording 100 frames...&quot;</span>)</a>
+<a class="sourceLine" id="cb16-12" title="12">    <span class="co"># No need to call stop_recording() - it stops automatically</span></a>
+<a class="sourceLine" id="cb16-13" title="13"></a>
+<a class="sourceLine" id="cb16-14" title="14"><span class="co"># Directory already exists - automatic rename</span></a>
+<a class="sourceLine" id="cb16-15" title="15">radar.start_recording(<span class="st">&quot;~/existing_dir&quot;</span>)</a>
+<a class="sourceLine" id="cb16-16" title="16"><span class="co"># Will create: ~/existing_dir_1699999999999999999</span></a></code></pre></div>
+<h4 id="stop_recording---stoprecordingresponse"><code>stop_recording() -&gt; StopRecordingResponse</code></h4>
+<p>Stops the current recording session and finalizes all files.</p>
+<p><strong>Function Signature:</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">def</span> stop_recording(<span class="va">self</span>) <span class="op">-&gt;</span> StopRecordingResponse</a></code></pre></div>
+<p><strong>Parameters:</strong> None</p>
+<p><strong>Returns:</strong> <code>StopRecordingResponse</code> object with: - <code>status</code>: Boolean indicating success - <code>path</code>: Path to the recording directory - Additional metadata about the recording session</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb18-1" title="1">response <span class="op">=</span> radar.stop_recording()</a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="cf">if</span> response.status:</a>
+<a class="sourceLine" id="cb18-3" title="3">    <span class="bu">print</span>(<span class="ss">f&quot;Recording saved to: </span><span class="sc">{</span>response<span class="sc">.</span>path<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb18-4" title="4">    <span class="bu">print</span>(<span class="ss">f&quot;Total frames recorded: </span><span class="sc">{</span>response<span class="sc">.</span>frames_count<span class="sc">}</span><span class="ss">&quot;</span>)  <span class="co"># if available</span></a>
+<a class="sourceLine" id="cb18-5" title="5"><span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb18-6" title="6">    <span class="bu">print</span>(<span class="st">&quot;No active recording to stop&quot;</span>)</a></code></pre></div>
+<p><strong>Note:</strong> If using <code>amount</code> parameter in <code>start_recording()</code>, the recording stops automatically when the frame count is reached, but you can still call <code>stop_recording()</code> to stop early.</p>
+<hr />
+<h2 id="complete-example">Complete Example</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb19-1" title="1"><span class="co">#!/usr/bin/env python3</span></a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="im">import</span> time</a>
+<a class="sourceLine" id="cb19-3" title="3"><span class="im">from</span> hrr_apis <span class="im">import</span> Radar</a>
+<a class="sourceLine" id="cb19-4" title="4"><span class="im">from</span> external.response <span class="im">import</span> ConnectResponseStatus</a>
+<a class="sourceLine" id="cb19-5" title="5"></a>
+<a class="sourceLine" id="cb19-6" title="6"><span class="co"># Using context manager (recommended)</span></a>
+<a class="sourceLine" id="cb19-7" title="7"><span class="cf">with</span> Radar(ip<span class="op">=</span><span class="st">&#39;192.168.1.31&#39;</span>) <span class="im">as</span> radar:</a>
+<a class="sourceLine" id="cb19-8" title="8">    <span class="co"># Connect</span></a>
+<a class="sourceLine" id="cb19-9" title="9">    <span class="bu">print</span>(<span class="st">&quot;Connecting to radar...&quot;</span>)</a>
+<a class="sourceLine" id="cb19-10" title="10">    connect_response <span class="op">=</span> radar.<span class="ex">connect</span>()</a>
+<a class="sourceLine" id="cb19-11" title="11">    <span class="cf">if</span> connect_response.status <span class="op">!=</span> ConnectResponseStatus.OK:</a>
+<a class="sourceLine" id="cb19-12" title="12">        <span class="bu">print</span>(<span class="ss">f&quot;Failed to connect: </span><span class="sc">{</span>connect_response<span class="sc">.</span>status<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-13" title="13">        exit(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb19-14" title="14">    </a>
+<a class="sourceLine" id="cb19-15" title="15">    <span class="bu">print</span>(<span class="st">&quot;✓ Connected successfully!&quot;</span>)</a>
+<a class="sourceLine" id="cb19-16" title="16">    </a>
+<a class="sourceLine" id="cb19-17" title="17">    <span class="co"># Wait for data to start flowing</span></a>
+<a class="sourceLine" id="cb19-18" title="18">    time.sleep(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb19-19" title="19"></a>
+<a class="sourceLine" id="cb19-20" title="20">    <span class="co"># Get heartbeat to check sensor health</span></a>
+<a class="sourceLine" id="cb19-21" title="21">    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Checking sensor status...&quot;</span>)</a>
+<a class="sourceLine" id="cb19-22" title="22">    heartbeat <span class="op">=</span> radar.get_heartbeat(timeout<span class="op">=</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb19-23" title="23">    <span class="cf">if</span> heartbeat:</a>
+<a class="sourceLine" id="cb19-24" title="24">        <span class="bu">print</span>(<span class="ss">f&quot;✓ Heartbeat received&quot;</span>)</a>
+<a class="sourceLine" id="cb19-25" title="25">        <span class="bu">print</span>(<span class="ss">f&quot;  Sensor ID: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>sensor_id<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-26" title="26">        <span class="bu">print</span>(<span class="ss">f&quot;  FW Version: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>versions<span class="sc">.</span>fw_main_app_ver_high<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-27" title="27">        <span class="bu">print</span>(<span class="ss">f&quot;  Status: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>status<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-28" title="28">    <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb19-29" title="29">        <span class="bu">print</span>(<span class="st">&quot;✗ No heartbeat received&quot;</span>)</a>
+<a class="sourceLine" id="cb19-30" title="30">    </a>
+<a class="sourceLine" id="cb19-31" title="31">    <span class="co"># Get a SODA frame</span></a>
+<a class="sourceLine" id="cb19-32" title="32">    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Requesting SODA data...&quot;</span>)</a>
+<a class="sourceLine" id="cb19-33" title="33">    soda <span class="op">=</span> radar.get_soda(timeout<span class="op">=</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb19-34" title="34">    <span class="cf">if</span> soda:</a>
+<a class="sourceLine" id="cb19-35" title="35">        <span class="bu">print</span>(<span class="ss">f&quot;✓ Received SODA frame&quot;</span>)</a>
+<a class="sourceLine" id="cb19-36" title="36">        <span class="bu">print</span>(<span class="ss">f&quot;  Cycle: </span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_Cycl_Count&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-37" title="37">        <span class="bu">print</span>(<span class="ss">f&quot;  Valid Detections: </span><span class="sc">{</span>soda<span class="sc">.</span>radar_header[<span class="st">&#39;HRR_F_ValidDtctn&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-38" title="38">        </a>
+<a class="sourceLine" id="cb19-39" title="39">        <span class="co"># Show first detection if available</span></a>
+<a class="sourceLine" id="cb19-40" title="40">        <span class="cf">if</span> <span class="bu">len</span>(soda.detections) <span class="op">&gt;</span> <span class="dv">0</span>:</a>
+<a class="sourceLine" id="cb19-41" title="41">            det <span class="op">=</span> soda.detections[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb19-42" title="42">            <span class="bu">print</span>(<span class="ss">f&quot;  First detection: (</span><span class="sc">{</span>det[<span class="st">&#39;x&#39;</span>]<span class="sc">:.2f}</span><span class="ss">, </span><span class="sc">{</span>det[<span class="st">&#39;y&#39;</span>]<span class="sc">:.2f}</span><span class="ss">, </span><span class="sc">{</span>det[<span class="st">&#39;z&#39;</span>]<span class="sc">:.2f}</span><span class="ss">) m&quot;</span>)</a>
+<a class="sourceLine" id="cb19-43" title="43">    <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb19-44" title="44">        <span class="bu">print</span>(<span class="st">&quot;✗ No SODA data received&quot;</span>)</a>
+<a class="sourceLine" id="cb19-45" title="45">    </a>
+<a class="sourceLine" id="cb19-46" title="46">    <span class="co"># Check statistics</span></a>
+<a class="sourceLine" id="cb19-47" title="47">    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Runtime Statistics:&quot;</span>)</a>
+<a class="sourceLine" id="cb19-48" title="48">    stats <span class="op">=</span> radar.get_statistics()</a>
+<a class="sourceLine" id="cb19-49" title="49">    <span class="bu">print</span>(<span class="ss">f&quot;  FPS: </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>current<span class="sc">:.1f}</span><span class="ss"> (avg: </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>mean<span class="sc">:.1f}</span><span class="ss">)&quot;</span>)</a>
+<a class="sourceLine" id="cb19-50" title="50">    <span class="bu">print</span>(<span class="ss">f&quot;  Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>latency<span class="sc">.</span>current<span class="sc">:.2f}</span><span class="ss"> ms (avg: </span><span class="sc">{</span>stats<span class="sc">.</span>latency<span class="sc">.</span>mean<span class="sc">:.2f}</span><span class="ss"> ms)&quot;</span>)</a>
+<a class="sourceLine" id="cb19-51" title="51">    </a>
+<a class="sourceLine" id="cb19-52" title="52">    <span class="co"># Start recording</span></a>
+<a class="sourceLine" id="cb19-53" title="53">    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Starting recording...&quot;</span>)</a>
+<a class="sourceLine" id="cb19-54" title="54">    <span class="cf">if</span> radar.start_recording(<span class="st">&quot;~/hrr_recordings/test_session&quot;</span>):</a>
+<a class="sourceLine" id="cb19-55" title="55">        <span class="bu">print</span>(<span class="st">&quot;✓ Recording started&quot;</span>)</a>
+<a class="sourceLine" id="cb19-56" title="56">        </a>
+<a class="sourceLine" id="cb19-57" title="57">        <span class="co"># Record for 10 seconds</span></a>
+<a class="sourceLine" id="cb19-58" title="58">        <span class="bu">print</span>(<span class="st">&quot;Recording for 10 seconds...&quot;</span>)</a>
+<a class="sourceLine" id="cb19-59" title="59">        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</a>
+<a class="sourceLine" id="cb19-60" title="60">            time.sleep(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb19-61" title="61">            stats <span class="op">=</span> radar.get_statistics()</a>
+<a class="sourceLine" id="cb19-62" title="62">            <span class="bu">print</span>(<span class="ss">f&quot;  </span><span class="sc">{i</span><span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">s - FPS: </span><span class="sc">{</span>stats<span class="sc">.</span>fps<span class="sc">.</span>current<span class="sc">:.1f}</span><span class="ss">, Latency: </span><span class="sc">{</span>stats<span class="sc">.</span>latency<span class="sc">.</span>current<span class="sc">:.1f}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb19-63" title="63">        </a>
+<a class="sourceLine" id="cb19-64" title="64">        <span class="co"># Stop recording</span></a>
+<a class="sourceLine" id="cb19-65" title="65">        response <span class="op">=</span> radar.stop_recording()</a>
+<a class="sourceLine" id="cb19-66" title="66">        <span class="bu">print</span>(<span class="ss">f&quot;✓ Recording stopped. Saved to: </span><span class="sc">{</span>response<span class="sc">.</span>path<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb19-67" title="67">    <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb19-68" title="68">        <span class="bu">print</span>(<span class="st">&quot;✗ Failed to start recording&quot;</span>)</a>
+<a class="sourceLine" id="cb19-69" title="69"></a>
+<a class="sourceLine" id="cb19-70" title="70"><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Disconnected from radar&quot;</span>)</a></code></pre></div>
+<hr />
+<h2 id="reading-recorded-data">Reading Recorded Data</h2>
+<h3 id="reading-soda-files">Reading SODA Files</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb20-1" title="1"><span class="im">import</span> glob</a>
+<a class="sourceLine" id="cb20-2" title="2"><span class="im">from</span> external.builder <span class="im">import</span> SODA</a>
+<a class="sourceLine" id="cb20-3" title="3"></a>
+<a class="sourceLine" id="cb20-4" title="4"><span class="co"># Load a single SODA frame</span></a>
+<a class="sourceLine" id="cb20-5" title="5">soda <span class="op">=</span> SODA.load(<span class="st">&#39;/path/to/soda_seq_123_ts_1234567890.123456789.h5&#39;</span>)</a>
+<a class="sourceLine" id="cb20-6" title="6"></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="co"># Access metadata</span></a>
+<a class="sourceLine" id="cb20-8" title="8"><span class="bu">print</span>(<span class="ss">f&quot;Latency: </span><span class="sc">{</span>soda<span class="sc">.</span>latency<span class="sc">}</span><span class="ss"> ms&quot;</span>)</a>
+<a class="sourceLine" id="cb20-9" title="9"><span class="bu">print</span>(<span class="ss">f&quot;Cycle Count: </span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_Cycl_Count&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb20-10" title="10"><span class="bu">print</span>(<span class="ss">f&quot;Timestamp: </span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_TmStmp_Sec&#39;</span>]<span class="sc">}</span><span class="ss">.</span><span class="sc">{</span>soda<span class="sc">.</span>generic_header[<span class="st">&#39;HRR_F_TmStmp_NanoSec&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb20-11" title="11"><span class="bu">print</span>(<span class="ss">f&quot;Valid Detections: </span><span class="sc">{</span>soda<span class="sc">.</span>radar_header[<span class="st">&#39;HRR_F_ValidDtctn&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb20-12" title="12"><span class="bu">print</span>(<span class="ss">f&quot;Total Detections: </span><span class="sc">{</span><span class="bu">len</span>(soda.detections)<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb20-13" title="13"></a>
+<a class="sourceLine" id="cb20-14" title="14"><span class="co"># Process individual detections</span></a>
+<a class="sourceLine" id="cb20-15" title="15"><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(soda.detections)):</a>
+<a class="sourceLine" id="cb20-16" title="16">    det <span class="op">=</span> soda.detections[i]</a>
+<a class="sourceLine" id="cb20-17" title="17">    </a>
+<a class="sourceLine" id="cb20-18" title="18">    <span class="co"># Raw detection fields (scaled values)</span></a>
+<a class="sourceLine" id="cb20-19" title="19">    distance <span class="op">=</span> det[<span class="st">&#39;HRR_F_Dtctn_Dist&#39;</span>] <span class="op">*</span> <span class="fl">0.005</span>  <span class="co"># Scale to meters</span></a>
+<a class="sourceLine" id="cb20-20" title="20">    azimuth <span class="op">=</span> det[<span class="st">&#39;HRR_F_Dtctn_Azi&#39;</span>] <span class="op">*</span> <span class="fl">5.0e-5</span> <span class="op">-</span> <span class="fl">1.571</span>  <span class="co"># Scale to radians</span></a>
+<a class="sourceLine" id="cb20-21" title="21">    elevation <span class="op">=</span> det[<span class="st">&#39;HRR_F_Dtctn_Elev&#39;</span>] <span class="op">*</span> <span class="fl">5.0e-5</span> <span class="op">-</span> <span class="fl">1.571</span>  <span class="co"># Scale to radians</span></a>
+<a class="sourceLine" id="cb20-22" title="22">    velocity <span class="op">=</span> det[<span class="st">&#39;HRR_F_Dtctn_RadVelo&#39;</span>]</a>
+<a class="sourceLine" id="cb20-23" title="23">    rcs <span class="op">=</span> det[<span class="st">&#39;HRR_F_Dtctn_RCS&#39;</span>]</a>
+<a class="sourceLine" id="cb20-24" title="24">    </a>
+<a class="sourceLine" id="cb20-25" title="25">    <span class="co"># Pre-calculated 3D coordinates (right-handed: X-Forward, Y-Left, Z-Up)</span></a>
+<a class="sourceLine" id="cb20-26" title="26">    x, y, z <span class="op">=</span> det[<span class="st">&#39;x&#39;</span>], det[<span class="st">&#39;y&#39;</span>], det[<span class="st">&#39;z&#39;</span>]</a>
+<a class="sourceLine" id="cb20-27" title="27">    </a>
+<a class="sourceLine" id="cb20-28" title="28">    <span class="bu">print</span>(<span class="ss">f&quot;Detection </span><span class="sc">{i}</span><span class="ss">:&quot;</span>)</a>
+<a class="sourceLine" id="cb20-29" title="29">    <span class="bu">print</span>(<span class="ss">f&quot;  Position: (</span><span class="sc">{x:.2f}</span><span class="ss">, </span><span class="sc">{y:.2f}</span><span class="ss">, </span><span class="sc">{z:.2f}</span><span class="ss">) m&quot;</span>)</a>
+<a class="sourceLine" id="cb20-30" title="30">    <span class="bu">print</span>(<span class="ss">f&quot;  Distance: </span><span class="sc">{</span>distance<span class="sc">:.2f}</span><span class="ss"> m, Az: </span><span class="sc">{</span>azimuth<span class="sc">:.3f}</span><span class="ss"> rad, El: </span><span class="sc">{</span>elevation<span class="sc">:.3f}</span><span class="ss"> rad&quot;</span>)</a>
+<a class="sourceLine" id="cb20-31" title="31">    <span class="bu">print</span>(<span class="ss">f&quot;  Velocity: </span><span class="sc">{</span>velocity<span class="sc">:.2f}</span><span class="ss"> m/s, RCS: </span><span class="sc">{</span>rcs<span class="sc">:.1f}</span><span class="ss"> dBsm&quot;</span>)</a>
+<a class="sourceLine" id="cb20-32" title="32"></a>
+<a class="sourceLine" id="cb20-33" title="33"><span class="co"># Process all SODA files in a recording</span></a>
+<a class="sourceLine" id="cb20-34" title="34">recording_dir <span class="op">=</span> <span class="st">&quot;~/hrr_recordings/test_session&quot;</span></a>
+<a class="sourceLine" id="cb20-35" title="35">soda_files <span class="op">=</span> <span class="bu">sorted</span>(glob.glob(<span class="ss">f&quot;</span><span class="sc">{</span>recording_dir<span class="sc">}</span><span class="ss">/soda/*.h5&quot;</span>))</a>
+<a class="sourceLine" id="cb20-36" title="36"></a>
+<a class="sourceLine" id="cb20-37" title="37"><span class="bu">print</span>(<span class="ss">f&quot;Found </span><span class="sc">{</span><span class="bu">len</span>(soda_files)<span class="sc">}</span><span class="ss"> SODA frames&quot;</span>)</a>
+<a class="sourceLine" id="cb20-38" title="38"></a>
+<a class="sourceLine" id="cb20-39" title="39"><span class="cf">for</span> soda_path <span class="kw">in</span> soda_files:</a>
+<a class="sourceLine" id="cb20-40" title="40">    soda <span class="op">=</span> SODA.load(soda_path)</a>
+<a class="sourceLine" id="cb20-41" title="41">    cycle <span class="op">=</span> soda.generic_header[<span class="st">&#39;HRR_F_Cycl_Count&#39;</span>]</a>
+<a class="sourceLine" id="cb20-42" title="42">    detections <span class="op">=</span> <span class="bu">len</span>(soda.detections)</a>
+<a class="sourceLine" id="cb20-43" title="43">    <span class="bu">print</span>(<span class="ss">f&quot;Cycle </span><span class="sc">{</span>cycle<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>detections<span class="sc">}</span><span class="ss"> detections&quot;</span>)</a></code></pre></div>
+<h3 id="reading-heartbeat-files">Reading Heartbeat Files</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb21-1" title="1"><span class="im">import</span> glob</a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="im">from</span> external.heartbeat <span class="im">import</span> Heartbeat</a>
+<a class="sourceLine" id="cb21-3" title="3"></a>
+<a class="sourceLine" id="cb21-4" title="4"><span class="co"># Load heartbeat data</span></a>
+<a class="sourceLine" id="cb21-5" title="5">heartbeat_files <span class="op">=</span> glob.glob(<span class="st">&quot;~/hrr_recordings/test_session/heartbeat/*.json&quot;</span>)</a>
+<a class="sourceLine" id="cb21-6" title="6"><span class="cf">if</span> heartbeat_files:</a>
+<a class="sourceLine" id="cb21-7" title="7">    heartbeat <span class="op">=</span> Heartbeat.load(heartbeat_files[<span class="dv">0</span>])</a>
+<a class="sourceLine" id="cb21-8" title="8">    </a>
+<a class="sourceLine" id="cb21-9" title="9">    <span class="bu">print</span>(<span class="ss">f&quot;Sensor ID: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>sensor_id<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb21-10" title="10">    <span class="bu">print</span>(<span class="ss">f&quot;FW Version: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>versions<span class="sc">.</span>fw_main_app_ver_high<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb21-11" title="11">    <span class="bu">print</span>(<span class="ss">f&quot;BPU Serial: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>versions<span class="sc">.</span>bpu_sn<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb21-12" title="12">    <span class="bu">print</span>(<span class="ss">f&quot;System Serial: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>versions<span class="sc">.</span>system_sn<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb21-13" title="13">    </a>
+<a class="sourceLine" id="cb21-14" title="14">    <span class="co"># Check temperature data</span></a>
+<a class="sourceLine" id="cb21-15" title="15">    <span class="cf">if</span> heartbeat.temperatures:</a>
+<a class="sourceLine" id="cb21-16" title="16">        <span class="bu">print</span>(<span class="ss">f&quot;TSIP 0 Temp: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>temperatures<span class="sc">.</span>tsip_0<span class="sc">}</span><span class="ss">°C&quot;</span>)</a>
+<a class="sourceLine" id="cb21-17" title="17">    </a>
+<a class="sourceLine" id="cb21-18" title="18">    <span class="co"># Check error counters</span></a>
+<a class="sourceLine" id="cb21-19" title="19">    <span class="cf">if</span> heartbeat.error_counters:</a>
+<a class="sourceLine" id="cb21-20" title="20">        <span class="bu">print</span>(<span class="ss">f&quot;Frame time errors: </span><span class="sc">{</span>heartbeat<span class="sc">.</span>error_counters<span class="sc">.</span>frame_time<span class="sc">}</span><span class="ss">&quot;</span>)</a></code></pre></div>
+<h3 id="reading-metadata">Reading Metadata</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb22-1" title="1"><span class="im">import</span> json</a>
+<a class="sourceLine" id="cb22-2" title="2"></a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="co"># Load session metadata</span></a>
+<a class="sourceLine" id="cb22-4" title="4"><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;~/hrr_recordings/test_session/metadata.json&quot;</span>) <span class="im">as</span> f:</a>
+<a class="sourceLine" id="cb22-5" title="5">    metadata <span class="op">=</span> json.load(f)</a>
+<a class="sourceLine" id="cb22-6" title="6"></a>
+<a class="sourceLine" id="cb22-7" title="7"><span class="bu">print</span>(<span class="ss">f&quot;Radar IP: </span><span class="sc">{</span>metadata[<span class="st">&#39;ip&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb22-8" title="8"><span class="bu">print</span>(<span class="ss">f&quot;MAC Address: </span><span class="sc">{</span>metadata[<span class="st">&#39;mac_address&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb22-9" title="9"><span class="bu">print</span>(<span class="ss">f&quot;Recording Date: </span><span class="sc">{</span>metadata[<span class="st">&#39;date&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb22-10" title="10"><span class="bu">print</span>(<span class="ss">f&quot;FW Version: </span><span class="sc">{</span>metadata[<span class="st">&#39;fw_version&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb22-11" title="11"><span class="bu">print</span>(<span class="ss">f&quot;Operation Mode: </span><span class="sc">{</span>metadata[<span class="st">&#39;operation_mode&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a>
+<a class="sourceLine" id="cb22-12" title="12"><span class="bu">print</span>(<span class="ss">f&quot;API Version: </span><span class="sc">{</span>metadata[<span class="st">&#39;api_version&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</a></code></pre></div>
+<hr />
+<h2 id="best-practices">Best Practices</h2>
+<ol type="1">
+<li><strong>✅ Use Context Manager</strong>: Always prefer <code>with Radar(...) as radar:</code> for automatic cleanup</li>
+<li><strong>✅ Check Connection Status</strong>: Verify <code>connect()</code> returns OK before proceeding</li>
+<li><strong>✅ Wait After Connect</strong>: Add <code>time.sleep(1)</code> after connecting before requesting data</li>
+<li><strong>✅ Handle Timeouts</strong>: Always check if <code>get_soda()</code> and <code>get_heartbeat()</code> return <code>None</code></li>
+<li><strong>✅ Monitor Disk Space</strong>: Ensure sufficient space before recording (minimum 1 GB required)</li>
+<li><strong>✅ Use Statistics</strong>: Call <code>get_statistics()</code> to monitor FPS, latency, and drops during operation</li>
+<li><strong>✅ Check Heartbeat</strong>: Periodically check <code>get_heartbeat()</code> for sensor health and error counters</li>
+<li><strong>✅ Validate Recordings</strong>: After recording, verify that SODA files exist and can be loaded</li>
+<li><strong>✅ Frame-Limited Recording</strong>: Use <code>amount</code> parameter to automatically stop after N frames</li>
+<li><strong>✅ 3D Coordinates</strong>: Use the pre-calculated <code>x</code>, <code>y</code>, <code>z</code> fields in detections for 3D position</li>
+</ol>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="fota-not-working-or-no-data-of-any-kind-recieved">FOTA not working or no data of any kind recieved</h3>
+<ul>
+<li>check ptp4l works on your setup</li>
+</ul>
+<h3 id="no-soda-data-received">No SODA data received</h3>
+<ul>
+<li>Check network configuration (socket buffer size: <code>sudo sysctl -w net.core.rmem_max=67108864</code>)</li>
+<li>Verify radar is streaming data using <code>get_heartbeat()</code></li>
+<li>Check statistics for drops: <code>radar.get_statistics().drops_counters</code></li>
+<li>Increase timeout value: <code>get_soda(timeout=10)</code></li>
+<li>Verify firewall allows UDP traffic</li>
+</ul>
+<h3 id="no-heartbeat-received">No Heartbeat received</h3>
+<ul>
+<li>Check if sensor is in correct operation mode</li>
+<li>Verify network connectivity</li>
+<li>Increase timeout: <code>get_heartbeat(timeout=10)</code></li>
+<li>Check if sensor is properly initialized</li>
+</ul>
+<h3 id="recording-fails-to-start">Recording fails to start</h3>
+<ul>
+<li>Check disk space: minimum 1 GB required</li>
+<li>Verify write permissions for output directory</li>
+<li>Directory auto-rename occurs if path exists (appends timestamp)</li>
+<li>Check if recording already in progress</li>
+</ul>
+<h3 id="low-fps-or-high-latency">Low FPS or High Latency</h3>
+<ul>
+<li>Check statistics: <code>stats = radar.get_statistics()</code></li>
+<li>Monitor network bandwidth and CPU usage</li>
+<li>Check for dropped messages in statistics</li>
+<li>Verify no other processes are using network heavily</li>
+</ul>
+<h3 id="database-hash-mismatch">Database Hash Mismatch</h3>
+<ul>
+<li>During recording, if DB hash validation fails, the file is skipped</li>
+<li>Check logs in recording directory for details</li>
+<li>May need to re-flash firmware or update databases</li>
+</ul>
+<hr />
+<h2 id="notes">Notes</h2>
+<ul>
+<li><strong>Colorful Logging</strong>: The API uses colorful console logging by default (automatically disabled in file logs)</li>
+<li><strong>Thread Safety</strong>: Recording and data acquisition run in separate processes for performance</li>
+<li><strong>HDF5 Format</strong>: All recordings use compressed HDF5 (lzf) format for efficient storage</li>
+<li><strong>Coordinate System</strong>: Detection x,y,z use right-handed system (X-Forward, Y-Left, Z-Up)</li>
+<li><strong>Auto-recording Stop</strong>: When using <code>amount</code> parameter, recording stops automatically</li>
+<li><strong>Database Validation</strong>: All downloaded DBs are hash-verified during recording start</li>
+<li><strong>Statistics Window</strong>: FPS/latency statistics calculated over configurable sliding window</li>
+</ul>
+</body>
+</html>
